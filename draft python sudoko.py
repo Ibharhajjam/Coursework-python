@@ -34,6 +34,8 @@ grid5 = [
 		[0, 1, 0, 4],
 		[0, 0, 0, 1]]
 
+#Grids 6-12 are 3x3
+
 grid6 = [
 		[0, 0, 6, 0, 0, 3],
 		[5, 0, 0, 0, 0, 0],
@@ -42,7 +44,70 @@ grid6 = [
 		[0, 0, 1, 0, 0, 0],
 		[0, 5, 0, 0, 6, 4]]
 
-grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2)]
+grid7 = [
+        [9, 0, 6, 0, 0, 1, 0, 4, 0],
+        [7, 0, 1, 2, 9, 0, 0, 6, 0],
+        [4, 0, 2, 8, 0, 6, 3, 0, 0],
+        [0, 0, 0, 0, 2, 0, 9, 8, 0],
+        [6, 0, 0, 0, 0, 0, 0, 0, 2],
+        [0, 9, 4, 0, 8, 0, 0, 0, 0],
+        [0, 0, 3, 7, 0, 8, 4, 0, 9],
+        [0, 4, 0, 0, 1, 3, 7, 0, 6],
+        [0, 6, 0, 9, 0, 0, 1, 0, 8]]
+
+grid8 = [
+        [0, 0, 0, 2, 6, 0, 7, 0, 1],
+        [6, 8, 0, 0, 7, 0, 0, 9, 0],
+        [1, 9, 0, 0, 0, 4, 5, 0, 0],
+        [8, 2, 0, 1, 0, 0, 0, 4, 0],
+        [0, 0, 4, 6, 0, 2, 9, 0, 0],
+        [0, 5, 0, 0, 0, 3, 0, 2, 8],
+        [0, 0, 9, 3, 0, 0, 0, 7, 4],
+        [0, 4, 0, 0, 5, 0, 0, 3, 6],
+        [7, 0, 3, 0, 1, 8, 0, 0, 0]]
+
+grid9 = [
+        [0, 3, 0, 4, 0, 0],
+        [0, 0, 5, 6, 0, 3],
+        [0, 0, 0, 1, 0, 0],
+        [0, 1, 0, 3, 0, 5],
+        [0, 6, 4, 0, 3, 1],
+        [0, 0, 1, 0, 4, 6]]
+
+grid10 =[
+        [0, 0, 0, 6, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 5, 0, 1],
+        [3, 6, 9, 0, 8, 0, 4, 0, 0],
+        [0, 0, 0, 0, 0, 6, 8, 0, 0],
+        [0, 0, 0, 1, 3, 0, 0, 0, 9],
+        [4, 0, 5, 0, 0, 9, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 3, 0, 0],
+        [0, 0, 6, 0, 0, 7, 0, 0, 0],
+        [1, 0, 0, 3, 4, 0, 0, 0, 0]]
+
+grid11=[
+       [8, 0, 9, 0, 2, 0, 3, 0, 0],
+       [0, 3, 7, 0, 6, 0, 5, 0, 0],
+       [0, 0, 0, 4, 0, 9, 7, 0, 0],
+       [0, 0, 2, 9, 0, 1, 0, 6, 0],
+       [1, 0, 0, 3, 0, 6, 0, 0, 0],
+       [0, 0, 0, 0, 0, 0, 1, 0, 3],
+       [7, 0, 0, 0, 0, 0, 0, 0, 8],
+       [5, 0, 0, 0, 0, 0, 0, 1, 4],
+       [0, 0, 0, 2, 8, 4, 6, 0, 5]]
+
+grid12=[
+       [0, 2, 0, 0, 0, 0, 0, 1, 0],
+       [0, 0, 6, 0, 4, 0, 0, 0, 0],
+       [5, 8, 0, 0, 9, 0, 0, 0, 3],
+       [0, 0, 0, 0, 0, 3, 0, 0, 4],
+       [4, 1, 0, 0, 8, 0, 6, 0, 0],
+       [0, 0, 0, 0, 0, 0, 0, 9, 5],
+       [2, 0, 0, 0, 1, 0, 0, 8, 0],
+       [0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 3, 1, 0, 0, 8, 0, 5, 7]]
+
+grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2),(grid6, 3,3),(grid7,3,3),(grid8,3,3),(grid9,3,3),(grid10, 3,3),(grid11,3,3),(grid12,3,3)]
 '''
 ===================================
 DO NOT CHANGE CODE ABOVE THIS LINE
@@ -121,27 +186,54 @@ def find_empty(grid):
 	return None
 # Find the row and column indices of the top-left cell in the square
 
-def count_filled_cells(grid, row, col):
-    # Finding the idices numbers of the current square
-    square_cells_num = int((len(grid))**0.5)
+def count_filled_cells(grid, squares):
+    filled_counts = []
+    for s in squares:
+        # Finding the idices numbers of the current square
+        square_cells_num = int((len(grid))**0.5)
 
-    # Find the row and column indices of the top-left cell in the square
-    row_start = (row // square_cells_num) * square_cells_num
-    col_start = (col // square_cells_num) * square_cells_num
+        # Find the row and column indices of the top-left cell in the square
+        row_start = (s[0] // square_cells_num) * square_cells_num
 
-    # Count the number of filled cells in the square
-    count = 0
-    for i in range(row_start, row_start + square_cells_num):
-        for j in range(col_start, col_start + square_cells_num):
-            if grid[i][j] != 0:
-                count += 1
-
-    return count
+        col_start = (s[1] // square_cells_num) * square_cells_num
 
 
-def find_most_filled(grid):
+        # Count the number of filled cells in the square
+        count = 0
+        for i in range(row_start, row_start + square_cells_num):
+            for j in range(col_start, col_start + square_cells_num):
+                if grid[i][j] != 0:
+                    count += 1
+
+        # Add the square number and the count of filled cells to the list
+        filled_counts.append((s, count))
+
+    # Sort the list of tuples based on the count of filled cells in each square in descending order
+    filled_counts.sort(key=lambda x: x[1], reverse=True)
+
+    return filled_counts
+
+def sort_squares_by_filled_cells(grid, square_size):
+    counts = count_filled_cells(grid, square_size)
+    sorted_squares = sorted(counts, reverse=True)
+    return sorted_squares
+
+
+    
+
+
+#def find_most_filled(grid, n_rows, n_cols, empty_cells):
     n_rows = len(grid)
     n_cols = len(grid[0])
+    square_cells_num = int((len(grid))**0.5)
+    for i in range(n_rows):
+        row = grid[i]
+        for j in range(len(row)):
+            col= row[j]
+    row_start = (row // square_cells_num) * square_cells_num
+    col_start = (col // square_cells_num) * square_cells_num
+    empty_cells = find_empty(grid)
+    
     square_cells_num = int((len(grid))**0.5)
     number_cells = [] # a list to store the number of the cells are filled in each square.
     for i in range(n_rows):
@@ -164,7 +256,7 @@ def find_most_filled(grid):
     return find_empty(grid)
 
 
-def gussing_values(grid, row, col, n_rows, n_cols):
+def guessing_values(grid, row, col, n_rows, n_cols):
     # Create a set of all possible values
     all_values = set(range(1, n_rows * n_cols + 1))
 
@@ -181,7 +273,34 @@ def gussing_values(grid, row, col, n_rows, n_cols):
                                         for j in range(square_col, square_col + n_cols))
 
     # Return the set of values that are not present in any of the above sets
-    return all_values - row_values - col_values - square_values
+    available_values = all_values - row_values - col_values - square_values
+
+    # If there is only one available value, return it
+    if len(available_values) == 1:
+        return available_values.pop()
+
+    # Sort the squares by the number of filled cells
+    sorted_squares = sort_squares_by_filled_cells(grid)
+
+    # Loop through the sorted squares to start guessing the numbers
+    for count, row_start, col_start in sorted_squares:
+        for i in range(row_start, row_start + n_rows):
+            for j in range(col_start, col_start + n_cols):
+                if grid[i][j] == 0:
+                    for value in available_values:
+                        # Make a copy of the grid to try out the value
+                        temp_grid = [row[:] for row in grid]
+                        temp_grid[i][j] = value
+
+                        # Recursively call the function with the new grid
+                        result = guessing_values(temp_grid, i, j, n_rows, n_cols)
+
+                        # If a solution is found, return it
+                        if result is not None:
+                            return result
+
+    # If no solution is found, return None
+    return None
 
 
 
@@ -195,66 +314,41 @@ def recursive_solve(grid, n_rows, n_cols):
     return: A solved grid (as a nested list), or None
     '''
 
-    # N is the maximum integer considered in this board
-    n = n_rows * n_cols
-    # Find an empty place in the grid
-    empty = find_empty(grid)
+    #N is the maximum integer considered in this board
+    n = n_rows*n_cols
 
-    # If there's no empty places left, check if we've found a solution
-    if not empty:
-        # If the solution is correct, return it.
-        if check_solution(grid, n_rows, n_cols):
-            return grid
-        else:
-            # If the solution is incorrect, return None
-            return None
-  
-    row, col = empty 
+    # Sort squares by the number of filled cells in each square
+    square_indices = [(i, j) for i in range(0, n_rows, 3) for j in range(0, n_cols, 3)]
+    sorted_squares = sort_squares_by_filled_cells(grid, square_indices)
 
-    # Loop through possible values
-    for i in range(1, n+1):
-        # Check if the value is allowed in this position
-        if i not in grid[row]:
-            if i not in [grid[k][col] for k in range(n_rows**2)]:
-                square_row = (row // n_rows) * n_rows
-                square_col = (col // n_cols) * n_cols
-                if i not in [grid[square_row + j][square_col + k] for j in range(n_rows) for k in range(n_cols)]:
-                    # Place the value into the grid
-                    grid[row][col] = i
-                    # Recursively solve the grid
-                    ans = recursive_solve(grid, n_rows, n_cols)
-                    # If we've found a solution, return it
-                    if ans:
-                        return ans
-
-                    # If we couldn't find a solution, that must mean this value is incorrect.
-                    # Reset the grid for the next iteration of the loop
-                    grid[row][col] = 0
-
-    # If we get here, we've tried all possible values. 
-    # Use count_filled_cells function to get the cell with fewest possibilities
-    empty_cells = count_filled_cells(grid, n_rows, n_cols, 0)
-    # Use find_most_filled_cell function to get the cell with most filled neighbors
-    row, col = find_most_filled(grid, n_rows, n_cols, empty_cells)
-    # Use possible_values function to get the possible values for the chosen cell
-    possible_valus = gussing_values(grid, n_rows, n_cols, row, col)
-    
-    # Loop through possible values
-    for value in possible_valus:
-        # Place the value into the grid
-        grid[row][col] = value
-        # Recursively solve the grid
-        ans = recursive_solve(grid, n_rows, n_cols)
-        # If we've found a solution, return it
-        if ans:
-            return ans
-
-        # If we couldn't find a solution, that must mean this value is incorrect.
-        # Reset the grid for the next iteration of the loop
-        grid[row][col] = 0
-
-    # If we get here, we've tried all possible values. Return none to indicate the previous value is incorrect.
-    return None
+    # Find an empty place in the grid in the most filled square
+    for count, row_start, col_start in sorted_squares:
+        for row_offset in range(n_rows // 3):
+            for col_offset in range(n_cols // 3):
+                row = row_start + row_offset
+                col = col_start + col_offset
+                if grid[row][col] == 0:
+                    #Loop through possible values
+                    for i in range(1, n+1):
+                        #Place the value into the grid
+                        grid[row][col] = i
+                        # Check if the new value is valid
+                        if check_solution(grid, n_rows, n_cols):
+                            #Recursively solve the grid
+                            ans = recursive_solve(grid, n_rows, n_cols)
+                            #If we've found a solution, return it
+                            if ans:
+                                return ans 
+                        #If the value is not valid, reset the cell to 0 for the next iteration
+                        grid[row][col] = 0 
+                    #If we get here, we've tried all possible values. Return none to indicate the previous value is incorrect.
+                    return None
+    #If there are no empty cells left, check if we've found a solution
+    if check_solution(grid, n_rows, n_cols):
+        return grid 
+    else:
+        #If the solution is incorrect, return None
+        return None
 
 
 def random_solve(grid, n_rows, n_cols, max_tries=50000):
