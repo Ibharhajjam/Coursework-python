@@ -1,0 +1,14 @@
+def explain(grid,n_rows,n_cols):
+    n= n_rows*n_cols 
+    solution = recursive_solve(grid, n_rows, n_cols)
+    for row in range(n):
+        for col in range(n):
+           if grid[row][col] == 0: #if the grid has not been solved yet use hint flag to solve it.
+               
+               print("use hint flag")
+           else:
+              
+              print(f"put {grid[row][col]} in location ({row+1},{col+1})") #put number in location (row,col)
+    return 
+    
+    print(solution,explain(grid,n_rows,n_cols))
