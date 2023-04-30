@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import time
+import sys
 
 #Grids 1-4 are 2x2
 grid1 = [
@@ -106,11 +107,6 @@ grid12=[
 
 grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2),(grid6,2,3), (grid7,3,3),(grid8,3,3),(grid9,2,3),(grid10, 3,3),(grid11,3,3),(grid12,3,3)]
 
-'''
-===================================
-DO NOT CHANGE CODE ABOVE THIS LINE
-===================================
-'''
 
 def check_section(section, n):
 
@@ -235,7 +231,7 @@ def best_zero(grid, n_rows, n_cols, total):
     
     
     
-def recursive_solve(grid, n_rows, n_cols):
+def recursive_solve(explain_requested, grid, n_rows, n_cols):
     '''
     This function uses recursion to exhaustively search all possible solutions to a grid
     until the solution is found
@@ -243,6 +239,7 @@ def recursive_solve(grid, n_rows, n_cols):
     args: grid, n_rows, n_cols
     return: A solved grid (as a nested list), or None
     '''
+    #print('recursive solving')
     n = n_cols*n_rows
     
     total = set()
@@ -271,7 +268,7 @@ def recursive_solve(grid, n_rows, n_cols):
             #Place the value into the grid
             grid[row][col] = i
             #Recursively solve the grid
-            ans = recursive_solve(grid, n_rows, n_cols)
+            ans = recursive_solve(explain_requested, grid, n_rows, n_cols)
             #If we've found a solution, return it
             if ans:
                 return ans 
@@ -283,37 +280,119 @@ def recursive_solve(grid, n_rows, n_cols):
     #If we get here, we've tried all possible values. Return none to indicate the previous value is incorrect.
     return None
 
+def wavefront_solve(explain_requested, grid, n_rows, n_cols):
+    print('wavefront solving')
+    print('explain requested?', explain_requested)
+
+    return
 
 
 
-'''
-===================================
-DO NOT CHANGE CODE BELOW THIS LINE
-===================================
-'''
-def main():
+def explain():
+    print('explain function activated')
+    return
 
-    points = 0
+def file_retrieve(input_address):
+    print('retrieving file')
+    print('location:', input_address)
+    return grid, n_rows, n_cols
 
-    print("Running test script for coursework 1")
-    print("====================================")
+
+
+def hint(N):
+    print('hint function activated')
+    print('N is ', N)
+    return
+
+def profile(wavefront_requested):
+    #should use 'solve' function to differentiate between wavefront and recursive.
+    print('profile function activated')
+
+
+def arguments(args):
     
-    for (i, (grid, n_rows, n_cols)) in enumerate(grids):
-        print("Solving grid: %d" % (i+1))
-        start_time = time.time()
-        solution = recursive_solve(grid, n_rows, n_cols)
-        elapsed_time = time.time() - start_time
-        print("Solved in: %f seconds" % elapsed_time)
+    wavefront_requested = False
+    explain_requested = False
+    file_requested = False
+    hint_requested = False
+    profile_requested = False
+    
+    input_address = None
+    output_address = None
+    N = None
+    
+    if '-wavefront' in args:
+        wavefront_requested = True
+        
+    
+    if '-explain' in args:
+        explain_requested = True
+        
+    if '-profile' in args:
+        profile_requested = True
+
+    
+    counter = 0
+    while counter < len(args):
+        
+        if args[counter] == '-file':
+            file_requested = True
+            input_address = args[counter +1]
+            output_address = args[counter +2]
+        if args[counter] == '-hint':
+            hint_requested = True
+            N = int(args[counter+1])
+        counter +=1
+    
+        
+
+        
+    
+    
+    
+
+    return wavefront_requested, explain_requested, file_requested, input_address, output_address, hint_requested, N, profile_requested
+
+
+def solve(explain_requested, wavefront_requested, grid, n_rows, n_cols):
+    print('explain requested?', explain_requested)
+
+    if wavefront_requested:
+        return wavefront_solve(explain_requested, grid, n_rows, n_cols)
+    else:
+        return recursive_solve(explain_requested, grid, n_rows, n_cols)
+
+
+
+
+    
+    
+def main(args):
+    
+    wavefront_requested, explain_requested, file_requested, input_address, output_address, hint_requested, N, profile_requested = arguments(args)
+    print(arguments(args))
+    
+    if profile_requested:
+        profile(wavefront_requested)
+        
+    elif file_requested:
+        
+        grid, n_rows, n_cols = file_retrieve(input_address)
+        solution = solve(explain_requested, wavefront_requested, grid, n_rows, n_cols)
         print(solution)
-        if check_solution(solution, n_rows, n_cols):
-            print("grid %d correct" % (i+1))
-            points = points + 10
-        else:
-            print("grid %d incorrect" % (i+1))
-
-    print("====================================")
-    print("Test script complete, Total points: %d" % points)
-
-
-if __name__ == "__main__":
-    main()
+        if hint_requested:
+            hint(N)
+            
+    elif file_requested == False:
+        
+        for (i, (grid, n_rows, n_cols)) in enumerate(grids):
+            print("Solving grid: %d" % (i+1))
+            solution = solve(explain_requested, wavefront_requested, grid, n_rows, n_cols)
+            print(solution)
+            if hint_requested:
+                hint(N)
+        
+        
+        
+if __name__ == '__main__':
+    main(sys.argv[1:])
