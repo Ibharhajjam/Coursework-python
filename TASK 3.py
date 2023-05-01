@@ -101,3 +101,208 @@ grid12=[
 
 grids = [(grid1, 2, 2), (grid2, 2, 2), (grid3, 2, 2), (grid4, 2, 2), (grid5, 2, 2),(grid6,2,3), (grid7,3,3),(grid8,3,3),(grid9,2,3),(grid10, 3,3),(grid11,3,3),(grid12,3,3)]
 
+
+
+test1 = [[{1,2,3,4},{3},{4,2},{1,2}],
+        [{1,3,4},{1,3},{4,1}, {2}],
+        [{2},{1,3,2},{1,4,3},{1,4,2,3}],
+        [{1,2,3},{1,2,3,4},{1,2},{1,2}]]
+
+test2 = [[{1}, {2},{3},{4}],
+        [{1}, {2},{3},{4}],
+        [{1}, {2},{3},{4}],
+        [{1}, {2},{3},{4}]]
+
+test3 = [[{1}, {1,2,3,4},{1,2,3,4},{1,2,3,4}],
+         [{1,2,3,4}, {1,2,3,4},{1,2,3,4},{1,2,3,4}],
+         [{1,2,3,4}, {1,2,3,4},{1,2,3,4},{1,2,3,4}],
+         [{1,2,3,4}, {1,2,3,4},{1,2,3,4},{1,2,3,4}]]
+
+def shortest_set(grid, n_rows, n_cols):
+    n = n_rows*n_cols
+    
+    length = 2
+    while length <= n:
+        row = 0
+        
+        while row < n:
+            
+            col = 0
+            while col < n:
+#                 print('length:', length)
+#                 print('row:', row)
+#                 print('col:', col)
+                combs = grid[row][col]
+                if len(combs) == length:
+                    return combs, row, col
+                col +=1
+            row +=1
+    
+        length +=1
+
+    #should return none ONLY if all sets have length 1. if no lengths shorter than the other, return the very first grid
+        
+    return None
+
+test = shortest_set(test1,2,2)
+print(test)
+test = shortest_set(test2,2,2)
+print(test)
+test = shortest_set(test3,2,2)
+print(test)
+        
+    
+    
+
+
+
+
+def check_section(section, n):
+
+    if len(set(section)) == len(section) and sum(section) == sum([i for i in range(n+1)]):
+        return True
+    return False
+
+def get_squares(grid, n_rows, n_cols):
+
+    squares = []
+    for i in range(n_cols):
+        rows = (i*n_rows, (i+1)*n_rows)
+        for j in range(n_rows):
+            cols = (j*n_cols, (j+1)*n_cols)
+            square = []
+            for k in range(rows[0], rows[1]):
+                line = grid[k][cols[0]:cols[1]]
+                square +=line
+            squares.append(square)
+
+
+    return(squares)
+
+#To complete the first assignment, please write the code for the following function
+def check_solution(grid, n_rows, n_cols):
+    '''
+    This function is used to check whether a sudoku board has been correctly solved
+
+    args: grid - representation of a suduko board as a nested list.
+    returns: True (correct solution) or False (incorrect solution)
+    '''
+    n = n_rows*n_cols
+
+    for row in grid:
+        if check_section(row, n) == False:
+            return False
+
+    for i in range(n_rows**2):
+        column = []
+        for row in grid:
+            column.append(row[i])
+
+        if check_section(column, n) == False:
+            return False
+
+    squares = get_squares(grid, n_rows, n_cols)
+    for square in squares:
+        if check_section(square, n) == False:
+            return False
+
+    return True
+
+
+
+#'find-empty()' function replaced with 'find_set()'
+
+
+
+   
+# def best_zero(grid, n_rows, n_cols, total):
+#     n = n_rows*n_cols
+#     options_list = []
+#     for f in range(n):
+#         for g in range(n):
+#             if grid[f][g] == 0:
+#                 
+#                 options = find_set(grid, f, g, n_rows, n_cols, total)
+#                 if len(options) == 1:
+#                     return f,g, options
+#                 #if there are any zeros with only one option, the function can end as no better zero can be found
+#                 
+#                     
+#                     
+#                 options_list.append([f,g, options, len(options)])
+#                 #creates a nested list with the coordinates of the zero, the set of options, and the length of the options set, so it can be sorted
+#                 
+#     
+#     if len(options_list) ==0:
+#         return None
+#     #stopping case for recursive function
+#     
+#     sorted_options_list = sorted(options_list, key=lambda x: x[3])
+#     return sorted_options_list[0]
+    #uses a throwaway variable lambda to sort the options_list by fewest options, then returns the list at index 0.
+    
+
+
+
+    
+    
+    
+def wavefront_solve(explain_requested, grid, n_rows, n_cols):
+    '''
+    This function uses recursion to exhaustively search all possible solutions to a grid
+    until the solution is found
+
+    args: grid, n_rows, n_cols
+    return: A solved grid (as a nested list), or None
+    '''
+    #print('recursive solving')
+    n = n_cols*n_rows
+    
+   
+    #N is the maximum integer considered in this board
+    #Find an empty place in the grid
+    combs, row, col = shortest_set(grid, n_rows, n_cols)
+    
+    #will need a function that strips off all 'set' notation'. Maybe puts it all back after? or maybe don't need to do any of that.    
+    
+    
+    
+    
+    
+    
+    #If there's no empty places left, check if we've found a solution
+    if not combs:
+        #CONVERT FROM SETS TO JUST NUMBERS
+        for row in range(n):
+            for col in range(n):
+                test2[row][col] = tuple(grid[row][col])[0]
+        
+        for i in grid:
+            for j in i:
+                j = int(j)
+        #If the solution is correct, return it.
+        if check_solution(grid, n_rows, n_cols):
+            return grid
+        else:
+            #If the solution is incorrect, return None
+            return None
+    else:
+            #the row and column locations is outputted by the function best_zero()
+            # the options are also outputted by the function best_zero()
+
+    #Loop through possible values
+        for i in combs:
+            #Place the value into the grid
+            grid[row][col] = i
+            #Recursively solve the grid
+            ans = wavefront_solve(explain_requested, grid, n_rows, n_cols)
+            #If we've found a solution, return it
+            if ans:
+                return ans 
+
+            #If we couldn't find a solution, that must mean this value is incorrect.
+            #Reset the grid for the next iteration of the loop
+            grid[row][col] = combs
+
+    #If we get here, we've tried all possible values. Return none to indicate the previous value is incorrect.
+    return None
