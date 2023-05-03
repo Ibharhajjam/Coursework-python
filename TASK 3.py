@@ -117,42 +117,24 @@ test3 = [[{1}, {1,2,3,4},{1,2,3,4},{1,2,3,4}],
          [{1,2,3,4}, {1,2,3,4},{1,2,3,4},{1,2,3,4}],
          [{1,2,3,4}, {1,2,3,4},{1,2,3,4},{1,2,3,4}],
          [{1,2,3,4}, {1,2,3,4},{1,2,3,4},{1,2,3,4}]]
+test4 = [[set(), set(), set(), set()],
+         [set(), set(), set(), set()],
+         [set(), set(), set(), set()],
+         [set(), set(), set(), set()]]
+         
 
-def shortest_set(grid, n_rows, n_cols):
-    n = n_rows*n_cols
-    
-    length = 2
-    while length <= n:
-        row = 0
-        
-        while row < n:
-            
-            col = 0
-            while col < n:
-#                 print('length:', length)
-#                 print('row:', row)
-#                 print('col:', col)
-                combs = grid[row][col]
-                if len(combs) == length:
-                    return combs, row, col
-                col +=1
-            row +=1
-    
-        length +=1
 
-    #should return none ONLY if all sets have length 1. if no lengths shorter than the other, return the very first grid
-        
-    return None
 
-test = shortest_set(test1,2,2)
-print(test)
-test = shortest_set(test2,2,2)
-print(test)
-test = shortest_set(test3,2,2)
-print(test)
-        
-    
-    
+# test = shortest_set(test1,2,2)
+# print(test)
+# test = shortest_set(test2,2,2)
+# print(test)
+# test = shortest_set(test3,2,2)
+# print(test)
+
+
+#fix this to work with sets
+
 
 
 
@@ -240,11 +222,122 @@ def check_solution(grid, n_rows, n_cols):
 #     sorted_options_list = sorted(options_list, key=lambda x: x[3])
 #     return sorted_options_list[0]
     #uses a throwaway variable lambda to sort the options_list by fewest options, then returns the list at index 0.
+
+def build_sets(n):
     
+    sudoku = []
+    for i in range(n):
+        comb_row = []
+
+        for j in range(n):
+            combinations = set()
+            for k in range(1,n+1):
+                combinations.add(k)
+                
+            comb_row.append(combinations)
+        sudoku.append(comb_row)
+    return sudoku
+
+sets = build_sets(4)
 
 
+def remove_duplicates(value, row, col, sudoku, n_rows, n_cols):
+    """
 
+    # Remove value from all sets in the same row, column and square
     
+    """
+    n = n_rows*n_cols
+    
+    for i in range(n):
+        row_set = sudoku[row][i]
+#         print('set =', row_set)
+        row_set.discard(value)
+#         print('new set =', row_set)
+        #removes all numbers in the zero's row from a set of 'given' numbers. 
+
+    for j in range(n):
+        
+        col_set = sudoku[j][col]
+        col_set.discard(value)
+        
+    #removes all numbers in the value's column from the same set
+#         
+    for k in range(n):
+        if k//n_rows== row//n_rows:
+            for l in range(n):
+                if l//n_cols == col//n_cols:
+                    box_set = sudoku[k][l]
+                    box_set.discard(value)
+    #removes all numbers in the value's square from the set
+    
+    
+    
+    
+    
+    
+    return sudoku
+
+# y = remove_duplicates(3, 0, 1, sets, 2, 2)
+# print(y)
+
+
+
+def process_rows(grid, n_rows, n_cols):
+    n = n_rows*n_cols
+    sudoku = build_sets(n)
+
+    for row in range(n):
+        for col in range(n):
+            value = grid[row][col]
+#             if value != 0:
+#                 print('value:',value)
+                
+#             else:
+#             print('code resumed again')
+            removed_board = remove_duplicates(value, row, col, sudoku, n_rows, n_cols)
+            
+#             print(removed_board)
+            
+    
+    
+    return removed_board
+
+
+#could then send this off to a program that measures the smallest set, then puts all the things back and takes out the set notation
+
+
+
+test_process= process_rows(grid2, 2, 2)
+# print(test_process)
+
+def shortest_set(grid, n_rows, n_cols):
+    n = n_rows*n_cols
+    
+    length = 1
+    while length <= n:
+        row = 0
+        
+        while row < n:
+            
+            col = 0
+            while col < n:
+#                 print('length:', length)
+#                 print('row:', row)
+#                 print('col:', col)
+                combs = grid[row][col]
+                if len(combs) == length:
+                    return combs, row, col
+                col +=1
+            row +=1
+    
+        length +=1
+
+    #should return none ONLY if all sets have length 1. if no lengths shorter than the other, return the very first grid
+        
+    return None
+
+print(shortest_set(test4, 2,2))
     
     
 def wavefront_solve(explain_requested, grid, n_rows, n_cols):
@@ -258,28 +351,34 @@ def wavefront_solve(explain_requested, grid, n_rows, n_cols):
     #print('recursive solving')
     n = n_cols*n_rows
     
+    removed_board = process_rows(grid, n_rows, n_cols)
    
     #N is the maximum integer considered in this board
     #Find an empty place in the grid
-    combs, row, col = shortest_set(grid, n_rows, n_cols)
+    combs, row, col = shortest_set(removed_board, n_rows, n_cols)
+    
+    print('combs, row, col', combs, row, col)
+    print('new grid', grid)
+    #could just put this in the first set!
     
     #will need a function that strips off all 'set' notation'. Maybe puts it all back after? or maybe don't need to do any of that.    
     
-    
-    
-    
-    
-    
     #If there's no empty places left, check if we've found a solution
-    if not combs:
+    if not combs:     
+        print('complete grid')
+        
+        
+        #PUT ALL THE NUMBERS BACK AS THEY WERE!
         #CONVERT FROM SETS TO JUST NUMBERS
+        
+        
         for row in range(n):
             for col in range(n):
+                
                 test2[row][col] = tuple(grid[row][col])[0]
-        
-        for i in grid:
-            for j in i:
-                j = int(j)
+                
+                
+                
         #If the solution is correct, return it.
         if check_solution(grid, n_rows, n_cols):
             return grid
@@ -302,7 +401,108 @@ def wavefront_solve(explain_requested, grid, n_rows, n_cols):
 
             #If we couldn't find a solution, that must mean this value is incorrect.
             #Reset the grid for the next iteration of the loop
+        #this would be where I'd need to reclass the iterations
+            
             grid[row][col] = combs
 
     #If we get here, we've tried all possible values. Return none to indicate the previous value is incorrect.
     return None
+
+def best_comb(grid, n_rows, n_cols):
+    
+    n = n_rows*n_cols
+    sudoku = build_sets(n)
+
+    for row in range(n):
+        for col in range(n):
+            value = grid[row][col]
+#             if value != 0:
+#                 print('value:',value)
+                
+#             else:
+#             print('code resumed again')
+            removed_board = remove_duplicates(value, row, col, sudoku, n_rows, n_cols)
+            
+#             print(removed_board)
+            
+    
+    
+    combs, row, col = shortest_set(removed_board, 2,2)
+    return row, col, combs
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def recursive_solve(explain_requested, grid, n_rows, n_cols):
+    '''
+    This function uses recursion to exhaustively search all possible solutions to a grid
+    until the solution is found
+
+    args: grid, n_rows, n_cols
+    return: A solved grid (as a nested list), or None
+    '''
+    #print('recursive solving')
+    n = n_cols*n_rows
+    
+    
+    
+    combs = best_comb(grid, n_rows, n_cols)
+    print(combs)
+    
+    
+    #If there's no empty places left, check if we've found a solution
+    if not combs:
+        #If the solution is correct, return it.
+        if check_solution(grid, n_rows, n_cols):
+            return grid
+        else:
+            #If the solution is incorrect, return None
+            return None
+    else:
+            #the row and column locations is outputted by the function best_zero()
+        row = combs[0]
+        col = combs[1]
+            # the options are also outputted by the function best_zero()
+
+        options = combs[2]
+        print('row=',row,col, options)
+        print('col=',col)
+        print('options=',options)
+    #Loop through possible values
+        for i in options:
+            #Place the value into the grid
+            print(i)
+            grid[row][col] = i
+            print(i)
+            #Recursively solve the grid
+            ans = recursive_solve(explain_requested, grid, n_rows, n_cols)
+            #If we've found a solution, return it
+            if ans:
+                return ans 
+
+            #If we couldn't find a solution, that must mean this value is incorrect.
+            #Reset the grid for the next iteration of the loop
+            grid[row][col] = 0 
+
+    #If we get here, we've tried all possible values. Return none to indicate the previous value is incorrect.
+    return None
+
+print(recursive_solve(False,grid5,2,2))
+
+# solution =wavefront_solve(False, grid4, 2,2)
+# print(solution)
