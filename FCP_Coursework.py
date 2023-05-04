@@ -299,7 +299,7 @@ This part involves the functions that will be called from the terminal.
 
 
 def wavefront_solve(grid, n_rows, n_cols, fills):
-    def wavefront_solve(grid, n_rows, n_cols, fills):
+    
 
     """
 
