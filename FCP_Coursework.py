@@ -400,13 +400,21 @@ def wavefront_solve(grid, n_rows, n_cols, fills):
 #     
 #     print(solution,explain(grid,n_rows,n_cols))
 
-
+'''
+This function contains a variable name and a file name as input. 
+It reads the contents of the file and creates a 2D array from it. 
+The resulting 2D array is assigned to a variable with the given name.
+'''
 def read_grid(variable_name: str, file_name: str):
     with open(file_name) as f:
         grid = f.read()
         grid = "[["+grid.replace("\n", "],\n[")+"]]"
         exec(variable_name+"="+grid, globals())
-
+'''
+This function takes in an input address and reads a file from that address. 
+It creates a 2D array from the contents of the file, calculates the number of rows 
+and columns in the grid, and returns the grid along with n_rows and n_cols as a tuple.
+'''
 
 
 def file_retrieve(input_address):
@@ -655,7 +663,14 @@ def solve(wavefront_requested, grid, n_rows, n_cols, fills):
         return wavefront_solve(grid, n_rows, n_cols, fills)
     else:
         return recursive_solve(grid, n_rows, n_cols, fills)
-
+'''
+This function takes in  flags indicating whether to print an explanation 
+of the solution and whether to provide hints, the number of hints to provide, 
+whether to use the wavefront algorithm, a Sudoku grid, the number of rows, 
+and the number of columns. It then solves the Sudoku  using the specified algorithm, 
+prints out the steps required to solve the puzzle if explain_requested is True, 
+and prints out hints if hint_requested is True.
+'''
 def storing_solver(explain_requested, hint_requested, N, wavefront_requested, grid, n_rows, n_cols):
     
     fills = []
@@ -686,6 +701,11 @@ def storing_solver(explain_requested, hint_requested, N, wavefront_requested, gr
     
 
 
+'''
+The main function is the entry point of the program. 
+It takes in command-line arguments and determines 
+whether to read from a file or solve a set of predefined Sudoku puzzles.
+'''
 
 
     
