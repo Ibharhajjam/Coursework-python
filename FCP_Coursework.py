@@ -1,3 +1,6 @@
+
+
+
 import time
 import sys
 import matplotlib.pyplot as plt
@@ -381,30 +384,22 @@ def wavefront_solve(grid, n_rows, n_cols, fills):
 
     return recursive_solve(grid, n_rows, n_cols, fills)
 
-'''
-This function takes in a grid as a 2D array, along with n_rows and n_cols. 
-The way use for this function called the recursive_solve function It calculates the total number of cells in the grid and calls
-It then prints out the solution to the consoles to solve 
 
-'''
- def explain(grid,n_rows,n_cols):
-     n= n_rows*n_cols 
-     solution = recursive_solve(grid, n_rows, n_cols)
-     for row in range(n):
-         for col in range(n):
-            if grid[row][col] == 0: #if the grid has not been solved yet use hint flag to solve it.
-                
-                print("use hint flag")
-            else:               
-               print(f"put {grid[row][col]} in location ({row+1},{col+1})") #put number in location (row,col)
-     return 
-     
-     print(solution,explain(grid,n_rows,n_cols))
-'''
-This function contains a variable name and a file name as input. 
-It reads the contents of the file and creates a 2D array from it. 
-The resulting 2D array is assigned to a variable with the given name.
-'''
+# def explain(grid,n_rows,n_cols):
+#     n= n_rows*n_cols 
+#     solution = recursive_solve(grid, n_rows, n_cols)
+#     for row in range(n):
+#         for col in range(n):
+#            if grid[row][col] == 0: #if the grid has not been solved yet use hint flag to solve it.
+#                
+#                print("use hint flag")
+#            else:
+#               
+#               print(f"put {grid[row][col]} in location ({row+1},{col+1})") #put number in location (row,col)
+#     return 
+#     
+#     print(solution,explain(grid,n_rows,n_cols))
+
 
 def read_grid(variable_name: str, file_name: str):
     with open(file_name) as f:
@@ -412,11 +407,7 @@ def read_grid(variable_name: str, file_name: str):
         grid = "[["+grid.replace("\n", "],\n[")+"]]"
         exec(variable_name+"="+grid, globals())
 
-'''
-This function takes in an input address and reads a file from that address. 
-It creates a 2D array from the contents of the file, calculates the number of rows 
-and columns in the grid, and returns the grid along with n_rows and n_cols as a tuple.
-'''
+
 
 def file_retrieve(input_address):
     with open(input_address) as f:
@@ -531,15 +522,15 @@ def average_time(wavefront_requested, grids, n_trials):
 
 
 
- n_trials = 10 #number of trials
- average_times = average_time(wavefront_requested, grids, n_trials) #call the function
+# n_trials = 10 #number of trials
+# average_times = average_time(wavefront_requested, grids, n_trials) #call the function
 
- for i, time in average_times.items():
-     print(f"Grid {i+1}: {time:.2f} seconds")
-     
- time_average = []
- for i, time in average_times.items(): # loop over each item in average times dictionary and store the average time in the time_average list
-     time_average.append(time) #store the average time in the list
+# for i, time in average_times.items():
+#     print(f"Grid {i+1}: {time:.2f} seconds")
+#     
+# time_average = []
+# for i, time in average_times.items(): # loop over each item in average times dictionary and store the average time in the time_average list
+#     time_average.append(time) #store the average time in the list
 
 
 
@@ -606,13 +597,7 @@ def profile(wavefront_requested, grids):
 #     #should use 'solve' function to differentiate between wavefront and recursive.
 #     print('profile function activated')
 
-'''
-This function takes in a list of command-line arguments 
-Finally,it  returns a tuple containing information
-on which solving method to use, and then  print an explanation of the solution
 
-
-'''
 def arguments(args):
     
     wavefront_requested = False
@@ -662,6 +647,7 @@ def arguments(args):
 This function solve the sudoko grid in the method that have been chosen by the users.
 it returns the solution of the sudoko grid based on the users' choice .
 '''
+
 def solve(wavefront_requested, grid, n_rows, n_cols, fills):
     
 
@@ -669,14 +655,7 @@ def solve(wavefront_requested, grid, n_rows, n_cols, fills):
         return wavefront_solve(grid, n_rows, n_cols, fills)
     else:
         return recursive_solve(grid, n_rows, n_cols, fills)
-'''
-This function takes in  flags indicating whether to print an explanation 
-of the solution and whether to provide hints, the number of hints to provide, 
-whether to use the wavefront algorithm, a Sudoku grid, the number of rows, 
-and the number of columns. It then solves the Sudoku  using the specified algorithm, 
-prints out the steps required to solve the puzzle if explain_requested is True, 
-and prints out hints if hint_requested is True.
-'''
+
 def storing_solver(explain_requested, hint_requested, N, wavefront_requested, grid, n_rows, n_cols):
     
     fills = []
@@ -707,11 +686,7 @@ def storing_solver(explain_requested, hint_requested, N, wavefront_requested, gr
     
 
 
-'''
-The main function is the entry point of the program. 
-It takes in command-line arguments and determines 
-whether to read from a file or solve a set of predefined Sudoku puzzles.
-'''
+
 
     
     
