@@ -531,15 +531,15 @@ def average_time(wavefront_requested, grids, n_trials):
 
 
 
-# n_trials = 10 #number of trials
-# average_times = average_time(wavefront_requested, grids, n_trials) #call the function
+ n_trials = 10 #number of trials
+ average_times = average_time(wavefront_requested, grids, n_trials) #call the function
 
-# for i, time in average_times.items():
-#     print(f"Grid {i+1}: {time:.2f} seconds")
-#     
-# time_average = []
-# for i, time in average_times.items(): # loop over each item in average times dictionary and store the average time in the time_average list
-#     time_average.append(time) #store the average time in the list
+ for i, time in average_times.items():
+     print(f"Grid {i+1}: {time:.2f} seconds")
+     
+ time_average = []
+ for i, time in average_times.items(): # loop over each item in average times dictionary and store the average time in the time_average list
+     time_average.append(time) #store the average time in the list
 
 
 
