@@ -299,9 +299,88 @@ This part involves the functions that will be called from the terminal.
 
 
 def wavefront_solve(grid, n_rows, n_cols, fills):
-    print('wavefront solving')
+    def wavefront_solve(grid, n_rows, n_cols, fills):
 
-    return
+    """
+
+    Solve a Sudoku grid using wavefront propagation algorithm.
+
+    """
+    n = n_rows*n_cols
+
+    # Initialize the grid as a dictionary of possible values
+
+    possible_values = {(i, j): set(range(1, n+1)) for i in range(n) for j in range(n) if grid[i][j] == 0}
+
+ 
+
+    # Iterate until there are no more possible values to eliminate
+
+    while possible_values:
+
+        # Find the cell with the smallest number of possible values
+
+        cell = min(possible_values, key=lambda x: len(possible_values[x]))
+
+        values = possible_values[cell]
+
+ 
+
+        # If there is only one possible value, fill it in and eliminate it from related cells
+
+        if len(values) == 1:
+
+            value = values.pop()
+
+            i, j = cell
+
+            grid[i][j] = value
+
+ 
+
+            # Remove the filled value from the possible values of related cells
+
+            for k in range(n):
+
+               if grid[i][k] == 0:
+
+                    possible_values[(i, k)].discard(value)
+               if grid[k][j] == 0:
+
+                    possible_values[(k, j)].discard(value)
+
+ 
+            
+            i0, j0 = n_rows * (i // n_rows), n_cols * (j // n_cols)
+
+            for i1 in range(i0, i0 + n_rows):
+
+                for j1 in range(j0, j0 + n_cols):
+
+                    if grid[i1][j1] == 0:
+
+                        possible_values[(i1, j1)].discard(value)
+
+ 
+
+            # Remove the filled cell from possible values
+
+            possible_values.pop(cell)
+
+ 
+
+        # If there is more than one possible value, move on to the next cell
+
+        else:
+
+            break
+
+ 
+
+    # If there are no more cells with only one possible value, resort to recursive backtracking
+
+    return recursive_solve(grid, n_rows, n_cols, fills)
+
 
 # def explain(grid,n_rows,n_cols):
 #     n= n_rows*n_cols 
