@@ -244,7 +244,7 @@ def best_zero(grid, n_rows, n_cols, total):
     
     
     
-def recursive_solve(explain_requested, grid, n_rows, n_cols):
+def recursive_solve(grid, n_rows, n_cols, fills):
     '''
     This function uses recursion to exhaustively search all possible solutions to a grid
     until the solution is found
@@ -280,11 +280,10 @@ def recursive_solve(explain_requested, grid, n_rows, n_cols):
             #Place the value into the grid
             grid[row][col] = i
             #Recursively solve the grid
-            ans = recursive_solve(explain_requested, grid, n_rows, n_cols)
+            ans = recursive_solve(grid, n_rows, n_cols, fills)
             #If we've found a solution, return it
             if ans:
-                if explain_requested:
-                    print(f"put {grid[row][col]} in row{row+1}, column{col+1})") #put number in location (row,col)
+                fills.append([row, col, i])
                     
                 return ans 
 
@@ -299,26 +298,25 @@ This part involves the functions that will be called from the terminal.
 '''
 
 
-def wavefront_solve(explain_requested, grid, n_rows, n_cols):
+def wavefront_solve(grid, n_rows, n_cols, fills):
     print('wavefront solving')
-    print('explain requested?', explain_requested)
 
     return
 
-def explain(grid,n_rows,n_cols):
-    n= n_rows*n_cols 
-    solution = recursive_solve(grid, n_rows, n_cols)
-    for row in range(n):
-        for col in range(n):
-           if grid[row][col] == 0: #if the grid has not been solved yet use hint flag to solve it.
-               
-               print("use hint flag")
-           else:
-              
-              print(f"put {grid[row][col]} in location ({row+1},{col+1})") #put number in location (row,col)
-    return 
-    
-    print(solution,explain(grid,n_rows,n_cols))
+# def explain(grid,n_rows,n_cols):
+#     n= n_rows*n_cols 
+#     solution = recursive_solve(grid, n_rows, n_cols)
+#     for row in range(n):
+#         for col in range(n):
+#            if grid[row][col] == 0: #if the grid has not been solved yet use hint flag to solve it.
+#                
+#                print("use hint flag")
+#            else:
+#               
+#               print(f"put {grid[row][col]} in location ({row+1},{col+1})") #put number in location (row,col)
+#     return 
+#     
+#     print(solution,explain(grid,n_rows,n_cols))
 
 
 def read_grid(variable_name: str, file_name: str):
@@ -347,10 +345,7 @@ def file_retrieve(input_address):
 This function provides a partial solution as a hint for the users.
 it returns a partial solution (N squares given by the user) with instructions.
 '''
-def hint(N):
-    print('hint function activated')
-    print('N is ', N)
-    return
+
 
 
 '''
@@ -431,8 +426,8 @@ def average_time(wavefront_requested, grids, n_trials):
         t = 0
         for j in range(n_trials): # repeat the solving process for the same grid for the number of trials
             starting_time = time.time() # get the current time before starting to solve the grid
-            solve(False, wavefront_requested, grid, n_rows, n_cols)
-#             recursive_solve(grid, n_rows, n_cols) # solve the grid 
+            fills = []
+            solve(wavefront_requested, grid, n_rows, n_cols, fills)
             ending_time = time.time() # get the current time after finishing to solve the grid
             complete_time = ending_time - starting_time # calculate the time taken to solve the grid
             t += complete_time # add the time taken to the total time
@@ -571,13 +566,38 @@ This function solve the sudoko grid in the method that have been chosen by the u
 it returns the solution of the sudoko grid based on the users' choice .
 '''
 
-def solve(explain_requested, wavefront_requested, grid, n_rows, n_cols):
+def solve(wavefront_requested, grid, n_rows, n_cols, fills):
     
 
     if wavefront_requested:
-        return wavefront_solve(explain_requested, grid, n_rows, n_cols)
+        return wavefront_solve(grid, n_rows, n_cols, fills)
     else:
-        return recursive_solve(explain_requested, grid, n_rows, n_cols)
+        return recursive_solve(grid, n_rows, n_cols, fills)
+
+def storing_solver(explain_requested, hint_requested, N, wavefront_requested, grid, n_rows, n_cols):
+    
+    fills = []
+    
+    solution = solve(wavefront_requested, grid, n_rows, n_cols, fills)
+    fills.reverse()
+    if hint_requested:
+        for i in fills[:N]:
+            row = i[0]
+            col = i[1]
+            value = i[2]
+            print(f"put {value} in row {row+1}, column {col+1}") #put number in location (row,col)
+
+                
+    if explain_requested:
+        print(solution)
+
+        for i in fills:
+            row = i[0]
+            col = i[1]
+            value = i[2]
+            print(f"put {value} in row {row+1}, column {col+1}") #put number in location (row,col)
+    return solution
+    
 
 
 
@@ -595,25 +615,24 @@ def main(args):
     elif file_requested:
         
         grid, n_rows, n_cols = file_retrieve(input_address)
-        solution = solve(explain_requested, wavefront_requested, grid, n_rows, n_cols)
-        print(solution)
+        solution = storing_solver(explain_requested, hint_requested, N, wavefront_requested, grid, n_rows, n_cols)
+#         solution = solve(explain_requested, wavefront_requested, grid, n_rows, n_cols)
+#         print(solution)
         #then output it to output_address
         with open(output_address, 'w') as f:
             solution = str(solution)
             f.write(solution.replace("], [", "],\n["))
             
-        if hint_requested:
-            hint(N)
+        
             
     elif file_requested == False:
         
         for (i, (grid, n_rows, n_cols)) in enumerate(grids):
             print("Solving grid: %d" % (i+1))
-            solution = solve(explain_requested, wavefront_requested, grid, n_rows, n_cols)
-            print(solution)
-            if hint_requested:
-                hint(N)
-        
+            storing_solver(explain_requested, hint_requested, N, wavefront_requested, grid, n_rows, n_cols)
+#             solution = solve(explain_requested, wavefront_requested, grid, n_rows, n_cols)
+#             print(solution)
+            
         
         
 if __name__ == '__main__':
